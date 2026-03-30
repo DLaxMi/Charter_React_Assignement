@@ -4,31 +4,62 @@ import styled from 'styled-components';
 import { MONTHS, YEARS } from '../constants';
 
 const Container = styled.div`
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px;
+  display: grid;
+  gap: 16px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #334155;
 `;
 
 const Select = styled.select`
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f172a;
 `;
 
+const controlOptions = (values) => values.map((value) => (
+  <option key={value} value={value}>
+    {value}
+  </option>
+));
+
 const Filters = ({ selectedYear, onYearChange, selectedMonth, onMonthChange }) => {
+  const handleYearChange = (event) => {
+    onYearChange(parseInt(event.target.value, 10));
+  };
+
+  const handleMonthChange = (event) => {
+    onMonthChange(event.target.value || null);
+  };
+
+  const renderYearOptions = () => controlOptions(YEARS);
+
+  const renderMonthOptions = () => controlOptions(MONTHS);
+
   return (
     <Container>
       <div>
-        <label>Year: </label>
-        <Select value={selectedYear} onChange={(e) => onYearChange(parseInt(e.target.value))}>
-          {YEARS.map(year => <option key={year} value={year}>{year}</option>)}
+        <Label htmlFor="year-select">Year</Label>
+        <Select id="year-select" value={selectedYear} onChange={handleYearChange}>
+          {renderYearOptions()}
         </Select>
       </div>
       <div>
-        <label>Month: </label>
-        <Select value={selectedMonth || ''} onChange={(e) => onMonthChange(e.target.value || null)}>
+        <Label htmlFor="month-select">Month</Label>
+        <Select id="month-select" value={selectedMonth || ''} onChange={handleMonthChange}>
           <option value="">All Months</option>
-          {MONTHS.map(month => <option key={month} value={month}>{month}</option>)}
+          {renderMonthOptions()}
         </Select>
       </div>
     </Container>
